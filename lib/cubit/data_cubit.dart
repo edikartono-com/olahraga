@@ -19,18 +19,6 @@ class DataCubit extends Cubit<DataState> {
     );
   }
 
-  // void addData(ModelData modelData) async {
-  //   emit(LoadingDataState());
-  //   var result = await dioHelper.addData(modelData);
-  //   result.fold(
-  //     (errorMessage) => emit(FailureSubmitDataState(errorMessage)),
-  //     (_) {
-  //       emit(SuccessSubmitDataState());
-  //       getAllData();
-  //     }
-  //   );
-  // }
-
   void addData(ModelData modelData) async {
     emit(LoadingDataState());
     var result = await dioHelper.addData(modelData);

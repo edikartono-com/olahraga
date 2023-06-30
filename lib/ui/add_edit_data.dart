@@ -188,6 +188,3 @@ class _AddEditDataState extends State<AddEditData> {
       );
     }
 }
-
-// https://github.com/CoderJava/flutter-crud-cubit/tree/master
-// https://medium.com/nusanet/flutter-crud-cubit-88b303bf546f
