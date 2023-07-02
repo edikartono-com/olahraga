@@ -109,7 +109,9 @@ class DioHelper {
         'user/register/',
         data: userProfile
       );
-      return response?.data;
+      if (response?.statusCode == 200) {
+        return response?.data;
+      }
     } catch (error) {
       return error;
     }
