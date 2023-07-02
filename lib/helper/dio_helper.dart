@@ -95,9 +95,7 @@ class DioHelper {
         data: formData
       );
 
-      if (response.statusCode == 200) {
-        return response.data;
-      }
+      return response.data;
     } catch (error) {
       return error;
     }

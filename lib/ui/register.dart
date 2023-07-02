@@ -16,6 +16,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController usernameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
+  final TextEditingController firstnameController = TextEditingController();
   final DioHelper _dioHelper = DioHelper();
   // bool _showPassword = false;
 
@@ -29,12 +30,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
       Map<String, dynamic> userData = {
         "username": usernameController.text,
         "password": passwordController.text,
-        "email": [
-          {
-            'Type': "primary",
-            'value': emailController.text
-          }
-        ]
+        "email": emailController.text,
+        "first_name": firstnameController.text
       };
 
       dynamic res = await _dioHelper.registerUser(userData);
@@ -89,6 +86,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
                         ),
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    TextFormField(
+                      controller: firstnameController,
+                      decoration: const InputDecoration(
+                        hintText: "Full Name",
+                        isDense: true,
                       ),
                     ),
                     const SizedBox(height: 20),

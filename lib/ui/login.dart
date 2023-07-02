@@ -33,9 +33,9 @@ class _LoginScreenState extends State<LoginScreen> {
       );
 
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
-
-      if (res['ErrorCode'] == null) {
-        String accessToken = res['access_token'];
+      
+      if (res) {
+        String accessToken = res;
         Navigator.push(
           context,
           MaterialPageRoute(
