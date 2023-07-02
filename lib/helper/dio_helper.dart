@@ -1,6 +1,9 @@
+// import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:olahraga/model/sport_data.dart';
+import 'package:olahraga/model/sport_user.dart';
 
 class DioHelper {
   Dio? _dio;
@@ -8,7 +11,7 @@ class DioHelper {
   DioHelper() {
     _dio = Dio(
       BaseOptions(
-        baseUrl: 'http://10.0.2.2:8001/'
+        baseUrl: 'https://rekano.com/'
       ),
     );
     _dio?.interceptors.add(LogInterceptor(requestBody: true, responseBody: true));
@@ -28,9 +31,15 @@ class DioHelper {
 
   Future<Either<String, bool>> addData(ModelData modelData) async {
     try {
+      var formData = FormData.fromMap({
+        'nama_cabang': modelData.nama_cabang,
+        'deskripsi': modelData.deskripsi,
+        'sejarah': modelData.sejarah,
+      });
+      
       await _dio?.post(
         'add/',
-        data: modelData.toJson(),
+        data: formData,
       );
       return const Right(true);
     } catch (error) {
@@ -40,6 +49,19 @@ class DioHelper {
 
   Future<Either<String, bool>> editData(ModelData modelData) async {
     try {
+      var formData = FormData();
+      formData.fields.addAll([
+        MapEntry('id', modelData.id.toString()),
+        MapEntry('nama_cabang', modelData.nama_cabang),
+        MapEntry('deskripsi', modelData.deskripsi),
+        MapEntry('sejarah', modelData.sejarah)
+      ]);
+
+      // if (imageFile != null) {
+      //   formData.files.add(
+      //     MapEntry('gambar', await MultipartFile.fromFile(imageFile.path))
+      //   );
+      // }
       _dio?.put(
         'update/${modelData.id}/',
         data: modelData.toJson(),
@@ -58,6 +80,61 @@ class DioHelper {
       return const Right(true);
     } catch (error) {
       return Left('$error');
+    }
+  }
+
+  Future login(String username, String password) async {
+    var formData = FormData.fromMap({
+        'username': username,
+        'password': password,
+      });
+
+    try {
+      Response response = await _dio!.post(
+        'user/login/',
+        data: formData
+      );
+
+      if (response.statusCode == 200) {
+        return response.data;
+      }
+    } catch (error) {
+      return error;
+    }
+  }
+
+  Future registerUser(Map<String, dynamic>? userProfile) async {
+    try {
+      Response? response = await _dio?.post(
+        'user/register/',
+        data: userProfile
+      );
+      return response?.data;
+    } catch (error) {
+      return error;
+    }
+  }
+
+  Future<Object> getUserProfile(String id) async {
+    try {
+      var response = await _dio?.get('user/profile/');
+      var listUserProfile = List<UserProfile>.from(
+        response?.data.map((e) => UserProfile.fromJson(e))
+      );
+      return Right(listUserProfile);
+    } catch (error) {
+      return Left('$error');
+    }
+  }
+
+  Future logout(String accessToken) async {
+    try {
+      Response? response = await _dio?.get(
+        'user/logout/'
+      );
+      return response?.data;
+    } catch (e) {
+      return Left('$e');
     }
   }
 }

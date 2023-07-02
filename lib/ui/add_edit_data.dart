@@ -7,6 +7,7 @@ import 'package:olahraga/cubit/data_cubit.dart';
 import 'package:olahraga/cubit/data_state.dart';
 import 'package:olahraga/helper/dio_helper.dart';
 import 'package:olahraga/model/sport_data.dart';
+// import 'package:image_picker/image_picker.dart';
 
 class AddEditData extends StatefulWidget  {
   final ModelData? modelData;
@@ -26,8 +27,11 @@ class _AddEditDataState extends State<AddEditData> {
   var controllerNama = TextEditingController();
   var controllerDeskripsi = TextEditingController();
   var controllerSejarah = TextEditingController();
+
   var isEdit = false;
   var isSuccess = false;
+
+  // late File? imageFile;
 
   @override
   void initState() {
@@ -39,6 +43,25 @@ class _AddEditDataState extends State<AddEditData> {
     }
     super.initState();
   }
+
+  // Future<void> _pickImage() async {
+  //   final imagePicker = ImagePicker();
+  //   final pickerImage = await imagePicker.pickImage(source: ImageSource.gallery);
+
+  //   if (pickerImage != null) {
+  //     setState(() {
+  //       imageFile = File(pickerImage.path);
+  //     });
+  //   }
+  // }
+
+  // @override
+  // void didChangeDependencies(){
+  //   super.didChangeDependencies();
+  //   if (widget.modelData != null) {
+  //     imageFile = File(widget.modelData?.gambar ?? '') as ImagePicker;
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -124,6 +147,12 @@ class _AddEditDataState extends State<AddEditData> {
               decoration: const InputDecoration(labelText: 'Sejarah'),
               keyboardType: TextInputType.text,
             ),
+            // ElevatedButton(
+            //   onPressed: _pickImage,
+            //   child: const Text('Choose Image'),
+            // ),
+            // // ignore: unnecessary_null_comparison
+            // if (imageFile != null) Image.file(imageFile as File),
             const SizedBox(height: 16),
             SizedBox(
               width: double.infinity,
@@ -141,19 +170,20 @@ class _AddEditDataState extends State<AddEditData> {
                     var namaCabang = controllerNama.text.trim();
                     var deskripsi = controllerDeskripsi.text.trim();
                     var sejarah = controllerSejarah.text.trim();
+
                     if (isEdit) {
                       var modelData = ModelData(
                         id: widget.modelData!.id,
                         nama_cabang: namaCabang,
                         deskripsi: deskripsi,
-                        sejarah: sejarah
+                        sejarah: sejarah,
                       );
                       dataCubit.editData(modelData);
                     } else {
                       var modelData = ModelData(
                         nama_cabang: namaCabang,
                         deskripsi: deskripsi,
-                        sejarah: sejarah
+                        sejarah: sejarah,
                       );
                       dataCubit.addData(modelData);
                     }

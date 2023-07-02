@@ -16,11 +16,15 @@ class ModelData {
   @JsonKey(name: 'sejarah')
   final String sejarah;
 
+  @JsonKey(name: 'gambar')
+  final String? gambar;
+
   ModelData({
     this.id,
     required this.nama_cabang,
     required this.deskripsi,
-    required this.sejarah
+    required this.sejarah,
+    this.gambar
   });
 
   factory ModelData.fromJson(Map<String, dynamic> json) => _$ModelDataFromJson(json);
@@ -29,6 +33,6 @@ class ModelData {
 
   @override
   String toString() {
-    return 'ModelData{id: $id, nama_cabang: $nama_cabang, deskripsi: $deskripsi, sejarah: $sejarah}';
+    return 'ModelData{id: $id, nama_cabang: $nama_cabang, deskripsi: $deskripsi, sejarah: $sejarah, gambar: $gambar}';
   }
 }

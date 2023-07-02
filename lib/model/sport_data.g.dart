@@ -7,10 +7,11 @@ part of 'sport_data.dart';
 // **************************************************************************
 
 ModelData _$ModelDataFromJson(Map<String, dynamic> json) => ModelData(
-      id: json['id'] as int,
+      id: json['id'] as int?,
       nama_cabang: json['nama_cabang'] as String,
       deskripsi: json['deskripsi'] as String,
       sejarah: json['sejarah'] as String,
+      gambar: json['gambar'] as String?,
     );
 
 Map<String, dynamic> _$ModelDataToJson(ModelData instance) => <String, dynamic>{
@@ -18,4 +19,5 @@ Map<String, dynamic> _$ModelDataToJson(ModelData instance) => <String, dynamic>{
       'nama_cabang': instance.nama_cabang,
       'deskripsi': instance.deskripsi,
       'sejarah': instance.sejarah,
+      'gambar': instance.gambar,
     };

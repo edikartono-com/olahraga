@@ -3,10 +3,15 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:olahraga/cubit/data_cubit.dart';
 import 'package:olahraga/cubit/data_state.dart';
 import 'package:olahraga/helper/dio_helper.dart';
 import 'package:olahraga/ui/add_edit_data.dart';
+import 'package:olahraga/ui/login.dart';
+import 'package:olahraga/ui/profile_data.dart';
+
+FlutterSecureStorage? secureStorage;
 
 void main() => runApp(const App());
 
@@ -25,11 +30,12 @@ class ListDataPage extends StatefulWidget {
   const ListDataPage({Key? key}) : super(key: key);
 
   @override
-  _ListDataPageState createState() => _ListDataPageState();
+  State<ListDataPage> createState() => _ListDataPageState();
 }
 
 class _ListDataPageState extends State<ListDataPage> {
   final scaffoldState = GlobalKey<ScaffoldState>();
+  final dioHelper = DioHelper();
   late DataCubit? dataCubit;
 
   @override
@@ -44,7 +50,28 @@ class _ListDataPageState extends State<ListDataPage> {
     return Scaffold(
       key: scaffoldState,
       appBar: AppBar(
-        title: const Text('Flutter CRUD Cubit'),
+        title: const Text('Sports'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.login),
+            onPressed: () async {
+              var result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => const LoginScreen()
+                )
+              );
+              if (result != null) {
+                await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => ProfileData(accessToken: result.accessToken)
+                  )
+                );
+              }
+            },
+          )
+        ],
       ),
       body: BlocProvider<DataCubit>(
         create: (_) => dataCubit!,
@@ -80,123 +107,40 @@ class _ListDataPageState extends State<ListDataPage> {
                 );
               } else if (state is SuccessAllLoadingDataState) {
                 var listDatas = state.listDatas;
-                return ListView.builder(
+
+                return GridView.count(
+                  crossAxisCount: 3,
                   padding: const EdgeInsets.all(16),
-                  itemCount: listDatas.length,
-                  itemBuilder: (_, index) {
+                  children: List.generate(listDatas.length, (index) {
                     var modelData = listDatas[index];
+
                     return Card(
                       child: Padding(
                         padding: const EdgeInsets.all(8),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.baseline,
+                          textBaseline: TextBaseline.alphabetic,
                           children: [
-                            Text(
-                              modelData.nama_cabang,
-                              style: const TextStyle(fontWeight: FontWeight.w500),
-                            ),
-                            Text(
-                              modelData.deskripsi,
-                              style: const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              modelData.sejarah,
-                              style: Theme.of(context).textTheme.bodySmall,
-                            ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                TextButton(
-                                  style: TextButton.styleFrom(
-                                    foregroundColor: Colors.red
-                                  ),
-                                  onPressed: () async {
-                                    var dialogConfirmDelete = Platform.isIOS ? await showCupertinoDialog<bool>(
-                                      context: context,
-                                      builder: (_) {
-                                        return CupertinoAlertDialog(
-                                          title: const Text('Warning'),
-                                          content: Text(
-                                            'Are you sure want to delete ${modelData.nama_cabang}\'s data?'
-                                          ),
-                                          actions: [
-                                            CupertinoDialogAction(
-                                              onPressed: () {
-                                                Navigator.pop(context, true);
-                                              },
-                                              isDefaultAction: true,
-                                              child: const Text('Delete'),
-                                            ),
-                                            CupertinoDialogAction(
-                                              child: const Text('Cancel'),
-                                              onPressed: () {
-                                                Navigator.pop(context, false);
-                                              },
-                                            )
-                                          ],
-                                        );
-                                      }
-                                    )
-                                    : await showDialog<bool>(
-                                      context: context,
-                                      builder: (_) {
-                                        return AlertDialog(
-                                          title: const Text('Warning'),
-                                          content: Text(
-                                            'Are you sure want to delete ${modelData.nama_cabang}\'s data?'
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              child: const Text(
-                                                'Delete',
-                                                style: TextStyle(color: Colors.red),
-                                              ),
-                                              onPressed: () {
-                                                Navigator.pop(context, true);
-                                              },
-                                            ),
-                                            TextButton(
-                                              child: const Text(
-                                                'Cancel',
-                                                style: TextStyle(color: Colors.blue),
-                                              ),
-                                              onPressed: () {
-                                                Navigator.pop(context, false);
-                                              },
-                                            )
-                                          ],
-                                        );
-                                      }
-                                    );
-                                    if (dialogConfirmDelete != null && dialogConfirmDelete) {
-                                      dataCubit?.deleteData(modelData.id!);
-                                    }
-                                  }, child: const Text('DELETE'),
-                                ),
-                                TextButton(
-                                  child: const Text('EDIT'),
-                                  onPressed: () async {
-                                    var result = await Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => AddEditData(
-                                          modelData: modelData,
-                                        )
-                                      )
-                                    );
-                                    if (result != null) {
-                                      dataCubit?.getAllData();
-                                    }
-                                  },
-                                )
-                              ],
-                            )
+                            if (modelData.gambar != null) 
+                              Image.network(
+                                modelData.gambar!,
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                              )
+                            else
+                              Image.asset(
+                                'lib/assets/images/no-image.png',
+                                width: 100,
+                                height: 100,
+                                fit: BoxFit.cover,
+                              )
                           ],
-                        ),
+                        )
                       ),
                     );
-                  },
+                  }),
                 );
               } else {
                 return Container();
@@ -211,7 +155,7 @@ class _ListDataPageState extends State<ListDataPage> {
           var result = await Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => const AddEditData(),
+              builder: (_) => const AddEditData(modelData: null),
             ),
           );
           if (result != null) {
