@@ -37,7 +37,7 @@ class _ProfileData extends State<ProfileData> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.blue,
       body: SizedBox(
           width: size.width,
           height: size.height,

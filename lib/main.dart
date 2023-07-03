@@ -149,20 +149,71 @@ class _ListDataPageState extends State<ListDataPage> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () async {
-          var result = await Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => const AddEditData(modelData: null),
+      bottomNavigationBar: Container(
+        height: 60,
+        decoration: BoxDecoration(
+          color: Theme.of(context).primaryColor,
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              enableFeedback: false,
+              onPressed: () {},
+              icon: const Icon(Icons.person),
+              iconSize: 45,
             ),
-          );
-          if (result != null) {
-            dataCubit?.getAllData();
-          }
-        },
+            IconButton(
+              enableFeedback: false,
+              onPressed: () {},
+              icon: const Icon(Icons.search),
+              iconSize: 45,
+            ),
+            IconButton(
+              enableFeedback: false,
+              onPressed: () {},
+              icon: const Icon(Icons.home),
+              iconSize: 45,
+            ),
+            IconButton(
+              enableFeedback: false,
+              onPressed: () {},
+              icon: const Icon(Icons.notifications),
+              iconSize: 45,
+            ),
+            IconButton(
+              enableFeedback: false,
+              onPressed: () async {
+                var result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const AddEditData(modelData: null),
+                  ),
+                );
+                if (result != null) {
+                  dataCubit?.getAllData();
+                }
+              },
+              icon: const Icon(Icons.menu),
+              iconSize: 45,
+            )
+          ],
+        ),
       ),
+      // floatingActionButton: FloatingActionButton(
+      //   child: const Icon(Icons.add),
+      //   onPressed: () async {
+      //     var result = await Navigator.push(
+      //       context,
+      //       MaterialPageRoute(
+      //         builder: (_) => const AddEditData(modelData: null),
+      //       ),
+      //     );
+      //     if (result != null) {
+      //       dataCubit?.getAllData();
+      //     }
+      //   },
+      // ),
     );
   }
 }

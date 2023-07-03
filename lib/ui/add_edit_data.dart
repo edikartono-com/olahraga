@@ -44,25 +44,6 @@ class _AddEditDataState extends State<AddEditData> {
     super.initState();
   }
 
-  // Future<void> _pickImage() async {
-  //   final imagePicker = ImagePicker();
-  //   final pickerImage = await imagePicker.pickImage(source: ImageSource.gallery);
-
-  //   if (pickerImage != null) {
-  //     setState(() {
-  //       imageFile = File(pickerImage.path);
-  //     });
-  //   }
-  // }
-
-  // @override
-  // void didChangeDependencies(){
-  //   super.didChangeDependencies();
-  //   if (widget.modelData != null) {
-  //     imageFile = File(widget.modelData?.gambar ?? '') as ImagePicker;
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     return WillPopScope(

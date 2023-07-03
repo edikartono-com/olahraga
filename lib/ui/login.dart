@@ -57,7 +57,7 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return Scaffold(
-        backgroundColor: Colors.blueGrey[200],
+        backgroundColor: Colors.blue,
         body: Form(
           key: _formKey,
           child: Stack(children: [
@@ -171,13 +171,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                       );
                                     }
                                   },
-                                  style: ElevatedButton.styleFrom(
-                                      primary: Colors.indigo,
-                                      shape: RoundedRectangleBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(10)),
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 40, vertical: 15)),
                                   child: const Text(
                                     "Register",
                                     style: TextStyle(
